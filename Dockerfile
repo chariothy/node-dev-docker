@@ -22,6 +22,7 @@ LABEL maintainer="chariothy" \
   org.opencontainers.image.description="Docker for node with node-dev" \
   org.opencontainers.image.licenses="MIT"
 
+RUN npm install node-dev -g
 WORKDIR /usr/src/app
 
 CMD [ "node" ]
