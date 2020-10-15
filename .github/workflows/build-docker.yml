@@ -15,6 +15,9 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    strategy:
+      matrix:
+        node-version: [10, 12, 14]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -43,11 +46,8 @@ jobs:
     - name: Build the image
       run: |
         docker buildx build --push \
-            --tag ${{ steps.vars.outputs.rep }}:latest \
-            --tag ${{ steps.vars.outputs.rep }}:${{ steps.vars.outputs.tag }} \
+            --tag ${{ steps.vars.outputs.rep }}:${{ matrix.node-version }} \
+            --tag ${{ steps.vars.outputs.rep }}:${{ matrix.node-version }}-latest \
+            --tag ${{ steps.vars.outputs.rep }}:${{ matrix.node-version }}-${{ steps.vars.outputs.tag }} \
+            --build-arg PYVER=${{ matrix.node-version }} \
             --platform linux/amd64,linux/arm64 .
-
-    - name: Inspect image
-      if: always() && github.event_name != 'pull_request'
-      run: |
-        docker buildx imagetools inspect ${{ steps.vars.outputs.rep }}:latest

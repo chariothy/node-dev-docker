@@ -1,7 +1,8 @@
 # For getmiaoss project
 # @version 1.0
 
-FROM node:lts
+ARG PYVER
+FROM node:${PYVER}
 LABEL maintainer="chariothy@gmail.com"
 
 ARG BUILD_DATE
